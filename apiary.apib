@@ -1,0 +1,135 @@
+FORMAT: X-1A
+
+# shipcloud API v1
+
+## Introduction
+To make it easier for you the developer, we've created the Shipcloud API deliberately using the RESTful architectural style. This means if you're familiar with REST and using RESTful services, you will have no problems using our API. As it's common when implementing a REST-API we're using resource-oriented URLs and HTTP authentication.
+
+For developers to test their code before shipping it, we're supplying every account with test and live API keys.
+
+## Authentication
+Every call to our API is secured by an API key. This key is tied specificly to your account and therefore should never be given to anyone else outside of your control. You are able to manage your API keys from your account page.
+
+Aside from sending you're API key all API requests must be made using HTTPS. Don't bother trying to use HTTP. It will fail!
+
+## Versioning
+From time to time we will be releasing new versions of our API. In order to not break (your) implementations of our API, we will adjust the path to reflect each new major version. So consecutive releases will be called using /v2/, /v3/ and so on after the base url.
+
+## Address handling
+When sending __to__ or __from__ parameters you have to specify a contact for the shipment. This can either be a __company__ or a person identified by __first_name__ and __last_name__. So although the entries are marked as being optional, one of them has to be specified in the request.
+
+# Shipment Resources [/shipments]
+The following is a section of resources related to shippings
+
+## Creating a shipment [POST]
+
++ Request (application/json)
+
+    + Body
+
+        {
+            "to": {
+                "company": "Receiver Inc.",
+                "first_name": "Max",
+                "last_name": "Mustermann",
+                "street": "Beispielstrasse",
+                "street_no": "42",
+                "city": "Hamburg",
+                "zip_code": "22100"
+            },
+            "package": {
+                "weight": 1.5,
+                "length": 20,
+                "width": 20,
+                "height": 20
+            },
+            "carrier": "dhl",
+            "reference_number": "ref123456",
+            "create_shipping_label": true
+        }
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+            "id": "3a186c51d4281acbecf5ed38805b1db92a9d668b",
+            "carrier_tracking_no": "84168117830018",
+            "tracking_url": "http://track.shipcloud.io/3a186c51d4",
+            "label_url": "http://api.shipcloud.io/shipping_label_3a186c51d4.pdf",
+            "price": 3.4
+        }
+
+## Get information about a shipment [/shipments/{id}]
+
++ Parameters
+
+    + id (number, `3a186c51d4281acbecf5ed38805b1db92a9d668b`) ... This is the ID of your shipment returned to you when creating a shipment
+
+### Get all infos [GET]
+
++ Response 200 (application/json)
+
+    {
+        "id": "3a186c51d4281acbecf5ed38805b1db92a9d668b",
+        "carrier_tracking_no": "84168117830018",
+        "carrier": "dhl",
+        "created_at": "2013-04-16T10:43:04Z",
+        "tracking_url": "http://track.shipcloud.io/3a186c51d4",
+        "label_url": "http://api.shipcloud.io/shipping_label_3a186c51d4.pdf",
+        "from": {
+            "company": "Musterfirma",
+            "first_name": "Hans",
+            "last_name": "Meier",
+            "care_of": null,
+            "street": "Musterstraße",
+            "street_no": "22",
+            "city": "Musterstadt",
+            "zip_code": "12345",
+            "state": null,
+            "country": "de"
+        },
+        "to": {
+            "company": "Receiver Inc.",
+            "first_name": "Max",
+            "last_name": "Mustermann",
+            "street": "Beispielstrasse",
+            "street_no": "42",
+            "city": "Hamburg",
+            "zip_code": "22100",
+            "state": null,
+            "country": "de"
+        },
+        "packages": [
+            {
+                "id": "3af8f7e5af196e1950deebd389a87406e1e5bb80",
+                "weight": 1.5,
+                "length": 10.0,
+                "width": 6.0,
+                "height": 8.0,
+                "tracking_events": [
+                    {
+                        "timestamp": "2013-05-26T16:55:24+02:00",
+                        "location": "Hamburg, Deutschland",
+                        "status": "delivered"
+                        "details": "Die Sendung wurde erfolgreich zugestellt."
+                    },
+                    {
+                        "timestamp": "2013-05-26T08:12:12+02:00",
+                        "location": "Hamburg, Deutschland",
+                        "status": "out_for_delivery"
+                        "details": "Die Sendung wurde in das Zustellfahrzeug geladen."
+                    },
+                    {
+                        "timestamp": "2013-05-25T11:46:34+02:00",
+                        "location": "Hamburg, Deutschland",
+                        "status": "transit"
+                        "details": "Die Sendung wurde im Start-Paketzentrum bearbeitet."
+                    }
+                ]
+            }
+        ],
+        "price": 3.4,
+        "reference_number": "ref123456"
+    }
+
