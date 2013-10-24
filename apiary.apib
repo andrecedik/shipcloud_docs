@@ -1,4 +1,4 @@
-FORMAT: X-1A
+FORMAT: 1A
 
 # shipcloud API v1
 
@@ -24,6 +24,10 @@ The following is a section of resources related to shippings
 ## Creating a shipment [POST]
 
 + Request (application/json)
+
+    + Headers
+
+            Authorization: [Base64](http://en.wikipedia.org/wiki/Base64) encoded string literal in form _"apikey:"_ preceeded by authorization method and its space.
 
     + Body
 
@@ -67,6 +71,12 @@ The following is a section of resources related to shippings
     + id (number, `3a186c51d4281acbecf5ed38805b1db92a9d668b`) ... This is the ID of your shipment returned to you when creating a shipment
 
 ### Get all infos [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: [Base64](http://en.wikipedia.org/wiki/Base64) encoded string literal in form _"apikey:"_ preceeded by authorization method and its space.
 
 + Response 200 (application/json)
 
