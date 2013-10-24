@@ -20,9 +20,10 @@ From time to time we will be releasing new versions of our API. In order to not 
 When sending __to__ or __from__ parameters you have to specify a contact for the shipment. This can either be a __company__ or a person identified by __first_name__ and __last_name__. So although the entries are marked as being optional, one of them has to be specified in the request.
 
 # Shipment Resources [/shipments]
-The following is a section of resources related to shippings
+The following is a section of resources related to shipments. Be advised: We will charge you only for shipments that a label was created for.
 
 ## Creating a shipment [POST]
+If you want to create a shipment, this is the way to go!
 
 + Request (application/json)
 
@@ -66,12 +67,14 @@ The following is a section of resources related to shippings
             }
 
 ## Working with shipments [/shipments/{id}]
+After creating a shipment, you can still do awesome stuff with it like finding out every piece of data we have on it or even deleting it, in case you've made a mistake while creating it.
 
 + Parameters
 
     + id (number, `3a186c51d4281acbecf5ed38805b1db92a9d668b`) ... This is the ID of your shipment returned to you when creating a shipment
 
 ### Get all infos [GET]
+You can get every piece of information we know about a shipment with this single call.
 
 + Request
 
@@ -145,6 +148,7 @@ The following is a section of resources related to shippings
         }
 
 ### Updating a shipment [PUT]
+If you haven't already created a shipping label for your shipment, you can still adjust it's parameters using this call.
 
 + Parameters
 
