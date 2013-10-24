@@ -65,7 +65,7 @@ The following is a section of resources related to shippings
                 "price": 3.4
             }
 
-## Get information about a shipment [/shipments/{id}]
+## Working with shipments [/shipments/{id}]
 
 + Parameters
 
@@ -144,12 +144,70 @@ The following is a section of resources related to shippings
             "reference_number": "ref123456"
         }
 
-
-## Update [/shipments/{id}]
+### Updating a shipment [PUT]
 
 + Parameters
 
-    + id (number, `3a186c51d4281acbecf5ed38805b1db92a9d668b`) ... This is the ID of your shipment returned to you when creating a shipment
+    + carrier (optional, string) ... the carrier you want to use. Possible values are _"DHL", "UPS", "HERMES", "DPD"_
+    + to (optional) ... object describing the receivers address
+    + company (optional, string) ... the receivers company name
+    + first_name (optional, string) ... the receivers first name
+    + last_name (optional, string) ... the receivers last name
+    + care_of (optional, string) ... name of the person that should be able to receive the package
+    + street (optional, string) ... street name
+    + street_no (optional, string) ... house number
+    + city (optional, string) ... city
+    + zip_code(optional, string) ... zip code
+    + state (optional, string) ... state
+    + country (optional, string) ... country as ISO 3166-1 alpha-2 code
+    + from (optional) ... object describing the senders address. Address definition: see "to". If missing, the default sender address (if defined in your shipcloud account) will be used
+    + package (optional) ... object describing the package dimensions
+    + number (string) ... used to identify the package
+    + width (optional, float) ... width of the package in cm
+    + length (optional, float) ... length of the package in cm
+    + height (optional, float) ... height of the package in cm
+    + weight (optional, float) ... weight in kg
+    + reference_number (optional, string) ... a reference number (max. 255 characters) that you want this shipment to be identified with. You can use this afterwards to easier find the shipment in the shipcloud.io backoffice
+    + create_shipping_label (boolean) ... determines if a shipping label should be created at the carrier (this means you will be charged)
 
-### Updating a shipment [PUT]
 
++ Request (application/json)
+
+    + Headers
+
+            Authorization: [Base64](http://en.wikipedia.org/wiki/Base64) encoded string literal in form _"apikey:"_ preceeded by authorization method and its space.
+
+    + Body
+
+            {
+              "to":{
+                  "company": "Receiver Inc.",
+                  "first_name": "Max",
+                  "last_name": "Mustermann",
+                  "street": "Beispielstrasse",
+                  "street_no": "42",
+                  "city": "Hamburg",
+                  "zip_code": "22100"
+              },
+              "package": {
+                  "weight": 1.5,
+                  "length": 20,
+                  "width": 20,
+                  "height": 20
+              },
+              "carrier": "dhl",
+              "reference_number": "ref123456",
+              "create_shipping_label" :true
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+              "id": "3a186c51d4281acbecf5ed38805b1db92a9d668b",
+              "carrier_tracking_no": "84168117830018",
+              "tracking_url": "http://track.shipcloud.io/3a186c51d4",
+              "label_url": "http://api.shipcloud.io/shipping_label_3a186c51d4.pdf",
+              "price": 3.4
+            }
